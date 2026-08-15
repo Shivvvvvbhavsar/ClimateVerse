@@ -1,0 +1,37 @@
+-- ==============================================================================
+-- ClimateVerse demo seed data
+-- ==============================================================================
+-- Demo/seed data is generated PROGRAMMATICALLY, not via static SQL, because it
+-- involves procedural city generation (deterministic random layout of
+-- buildings/roads/forests), running the simulation engine, and running the
+-- multi-agent system to populate agent_outputs/debates — logic that lives in
+-- Python, not SQL.
+--
+-- The seeder runs automatically on backend startup (see backend/app/main.py
+-- `on_startup`) and is idempotent — it checks whether "Pune" already exists
+-- before seeding, so it's safe to restart the app repeatedly.
+--
+-- To run it manually:
+--   cd backend && python ../scripts/seed_db.py
+--
+-- To force a full reseed:
+--   delete backend/climateverse.db (or the climateverse_data Docker volume)
+--   and restart the app.
+--
+-- See backend/app/seed.py for the full seeding logic. It creates:
+--   - 1 demo user (demo@climateverse.local / ClimateVerse@123)
+--   - 1 city (Pune) with 10 districts
+--   - ~250 procedurally placed buildings across those districts
+--   - 12 roads (10 radial + 1 ring road + 1 metro line)
+--   - 4 forest patches
+--   - 3 water bodies (Mula-Mutha river, Khadakwasla reservoir, Pashan lake)
+--   - 5 industries
+--   - 9 energy systems (grid + solar + wind)
+--   - 4 transport systems (bus, metro, EV, private)
+--   - 1 scenario ("Pune Carbon Neutral 2045")
+--   - 8 generated & ranked policies
+--   - 1 full 2025-2050 simulation run (26 years) for the top policy
+--   - 10 agent outputs + a full debate transcript + Coordinator recommendation
+--   - Employment / economic / citizen impact records
+--   - 1 demo disaster record (flood)
+-- ==============================================================================

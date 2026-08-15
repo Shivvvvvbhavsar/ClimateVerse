@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: climateverse-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DEMO_MODE=true
+      - DATABASE_URL=sqlite:////app/data/climateverse.db
+      - JWT_SECRET=${JWT_SECRET:-climateverse-demo-secret-change-in-production}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - climateverse_data:/app/data
+      - climateverse_reports:/app/generated_reports
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: climateverse-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  climateverse_data:
+  climateverse_reports:
