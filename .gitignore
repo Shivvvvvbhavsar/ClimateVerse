@@ -19,3 +19,5 @@ Thumbs.db
 
 # Generated
 generated_reports/
+
+.env
